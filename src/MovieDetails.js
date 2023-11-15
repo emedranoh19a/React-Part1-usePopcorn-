@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import React from "react";
 import StarRating from "./StarRating";
 import Loader from "./Loader";
 const API_Key = "68b66c15";
@@ -7,7 +8,7 @@ export default function MovieDetails({
   selectedId,
   onCloseMovie,
   onAddWatch,
-  onAlreadyWatched,
+  onGetRating,
 }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -20,21 +21,22 @@ export default function MovieDetails({
     Runtime: runtime,
     imdbRating,
     Plot: plot,
-    Released: released,
+
     Actors: actors,
     Director: director,
-    Genre: genre,
   } = movie;
   //The API works differently, with detailed info about 1 movie.
   //Effect triggers on every re-render
 
+  //If it has a rating, it means it is watched
+  const movieRating = onGetRating(selectedId);
   function handleAdd() {
     const newWatchedMovie = {
       imdbID: selectedId,
       title,
       year,
       poster,
-      imdbRating: Number(imdbRating),
+      imdbRating: imdbRating ? Number(imdbRating) : 0,
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
     };
@@ -42,6 +44,7 @@ export default function MovieDetails({
     onAddWatch(newWatchedMovie);
     onCloseMovie();
   }
+
   useEffect(
     function () {
       async function getMovieDetails() {
@@ -54,40 +57,28 @@ export default function MovieDetails({
         setIsLoading(false);
       }
       getMovieDetails();
+      setUserRating(null);
     },
     [selectedId]
   );
+
   return (
     <div className="details">
       {isLoading ? (
         <Loader />
       ) : (
         <>
-          <header>
-            <button className="btn-back" onClick={onCloseMovie}>
-              &larr;
-            </button>
-            <img src={poster} alt={`Poster of ${movie}`} />
-            <div className="details-overview">
-              <h2>{title}</h2>
-              <p>
-                {released} &bull; {runtime}
-              </p>
-              <p>{genre}</p>
-              <p>
-                <span>⭐️</span> {imdbRating} IMDb rating
-              </p>
-            </div>
-          </header>
+          <MovieDetailsHeader movie={movie} onCloseMovie={onCloseMovie} />
           <section>
             <div className="rating">
               <StarRating
                 maxRating={10}
                 size={24}
                 onSetRating={setUserRating}
+                defaultRating={movieRating ? movieRating : 0}
               />
 
-              {userRating && (
+              {!movieRating && userRating && (
                 <button className="btn-add" onClick={handleAdd}>
                   + Add to List
                 </button>
@@ -102,5 +93,35 @@ export default function MovieDetails({
         </>
       )}
     </div>
+  );
+}
+
+function MovieDetailsHeader({ movie, onCloseMovie }) {
+  const {
+    Title: title,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Released: released,
+    Genre: genre,
+  } = movie;
+
+  return (
+    <header>
+      <button className="btn-back" onClick={onCloseMovie}>
+        &larr;
+      </button>
+      <img src={poster} alt={`Poster of ${movie}`} />
+      <div className="details-overview">
+        <h2>{title}</h2>
+        <p>
+          {released} &bull; {runtime}
+        </p>
+        <p>{genre}</p>
+        <p>
+          <span>⭐️</span> {imdbRating} IMDb rating
+        </p>
+      </div>
+    </header>
   );
 }
