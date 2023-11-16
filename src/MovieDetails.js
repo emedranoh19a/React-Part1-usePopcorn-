@@ -9,6 +9,7 @@ export default function MovieDetails({
   onCloseMovie,
   onAddWatch,
   onGetRating,
+  watched,
 }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -86,10 +87,17 @@ export default function MovieDetails({
 
       return function () {
         //cleanup function
-        document.removeEventListener("keydown");
+        document.removeEventListener("keydown", callback);
       };
     },
     [onCloseMovie]
+  );
+
+  useEffect(
+    function () {
+      localStorage.setItem("watched", JSON.stringify(watched));
+    },
+    [watched]
   );
 
   return (
