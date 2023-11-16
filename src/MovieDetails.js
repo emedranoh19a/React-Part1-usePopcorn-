@@ -61,6 +61,36 @@ export default function MovieDetails({
     },
     [selectedId]
   );
+  //on mount
+  useEffect(
+    function () {
+      document.title = title;
+      return function () {
+        document.title = "usePopcorn";
+      };
+    },
+    [title]
+  );
+
+  useEffect(
+    function () {
+      //Effect
+      function callback(e) {
+        //Trigger appended to listener
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+
+      document.addEventListener("keydown", callback);
+
+      return function () {
+        //cleanup function
+        document.removeEventListener("keydown");
+      };
+    },
+    [onCloseMovie]
+  );
 
   return (
     <div className="details">
