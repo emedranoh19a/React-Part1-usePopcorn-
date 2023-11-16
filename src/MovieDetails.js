@@ -1,7 +1,11 @@
-import { useState, useEffect } from "react";
 import React from "react";
+
+import { useState, useEffect } from "react";
+import { useKey } from "./useKey";
+
 import StarRating from "./StarRating";
 import Loader from "./Loader";
+
 const API_Key = "68b66c15";
 
 export default function MovieDetails({
@@ -22,7 +26,6 @@ export default function MovieDetails({
     Runtime: runtime,
     imdbRating,
     Plot: plot,
-
     Actors: actors,
     Director: director,
   } = movie;
@@ -72,33 +75,7 @@ export default function MovieDetails({
     },
     [title]
   );
-
-  useEffect(
-    function () {
-      //Effect
-      function callback(e) {
-        //Trigger appended to listener
-        if (e.code === "Escape") {
-          onCloseMovie();
-        }
-      }
-
-      document.addEventListener("keydown", callback);
-
-      return function () {
-        //cleanup function
-        document.removeEventListener("keydown", callback);
-      };
-    },
-    [onCloseMovie]
-  );
-
-  useEffect(
-    function () {
-      localStorage.setItem("watched", JSON.stringify(watched));
-    },
-    [watched]
-  );
+  useKey("Enter", onCloseMovie);
 
   return (
     <div className="details">
