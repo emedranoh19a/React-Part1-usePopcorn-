@@ -5,7 +5,8 @@ import { useKey } from "./useKey";
 
 import StarRating from "./StarRating";
 import Loader from "./Loader";
-
+import styled from "styled-components";
+//TODO: get rid of this key, and prepare it for netlify
 const API_Key = "68b66c15";
 
 export default function MovieDetails({
@@ -78,14 +79,14 @@ export default function MovieDetails({
   useKey("Enter", onCloseMovie);
 
   return (
-    <div className="details">
+    <Details>
       {isLoading ? (
         <Loader />
       ) : (
         <>
           <MovieDetailsHeader movie={movie} onCloseMovie={onCloseMovie} />
           <section>
-            <div className="rating">
+            <Rating>
               <StarRating
                 maxRating={10}
                 size={24}
@@ -94,11 +95,9 @@ export default function MovieDetails({
               />
 
               {!movieRating && userRating && (
-                <button className="btn-add" onClick={handleAdd}>
-                  + Add to List
-                </button>
+                <ButtonAdd onClick={handleAdd}>+ Add to List</ButtonAdd>
               )}
-            </div>
+            </Rating>
             <p>
               <em>{plot}</em>
             </p>
@@ -107,7 +106,7 @@ export default function MovieDetails({
           </section>
         </>
       )}
-    </div>
+    </Details>
   );
 }
 
@@ -123,11 +122,9 @@ function MovieDetailsHeader({ movie, onCloseMovie }) {
 
   return (
     <header>
-      <button className="btn-back" onClick={onCloseMovie}>
-        &larr;
-      </button>
+      <StyledBackButton onClick={onCloseMovie}>&larr;</StyledBackButton>
       <img src={poster} alt={`Poster of ${movie}`} />
-      <div className="details-overview">
+      <DetailsOverview>
         <h2>{title}</h2>
         <p>
           {released} &bull; {runtime}
@@ -136,7 +133,97 @@ function MovieDetailsHeader({ movie, onCloseMovie }) {
         <p>
           <span>⭐️</span> {imdbRating} IMDb rating
         </p>
-      </div>
+      </DetailsOverview>
     </header>
   );
 }
+
+const StyledBackButton = styled.button`
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  height: 3.2rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: none;
+  /* background-color: var(--color-text); */
+  background-color: #fff;
+  color: var(--color-background-500);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+  font-family: sans-serif;
+  font-size: 2.4rem;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const DetailsOverview = styled.div`
+  width: 100%;
+  padding: 2.4rem 3rem;
+  background-color: var(--color-background-100);
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+
+  & h2 {
+    font-size: 2.4rem;
+    margin-bottom: 0.4rem;
+    line-height: 1.1;
+  }
+
+  & p {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+`;
+
+const ButtonAdd = styled.button`
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  border: none;
+  border-radius: 10rem;
+  font-size: 1.4rem;
+  padding: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: var(--color-primary-light);
+  }
+`;
+
+const Rating = styled.div`
+  background-color: var(--color-background-100);
+  border-radius: 0.9rem;
+  padding: 2rem 2.4rem;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+`;
+
+const Details = styled.div`
+  line-height: 1.4;
+  font-size: 1.4rem;
+
+  & header {
+    display: flex;
+  }
+
+  & section {
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+
+  & img {
+    width: 33%;
+  }
+`;

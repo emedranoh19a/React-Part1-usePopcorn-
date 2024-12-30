@@ -1,86 +1,42 @@
-import {  useRef } from "react";
+import { useRef } from "react";
 import { useKey } from "./useKey";
+import styled from "styled-components";
+
+const StyledInput = styled.input`
+  justify-self: center;
+  border: none;
+  padding: 1.1rem 1.6rem;
+  font-size: 1.8rem;
+  border-radius: 0.7rem;
+  width: 40rem;
+  transition: all 0.3s;
+  color: var(--color-text);
+
+  /* background-color: var(--color-background-900); */
+  background-color: var(--color-primary-light);
+
+  &::placeholder {
+    color: var(--color-text-dark);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 2.4rem 2.4rem rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+`;
+
 export default function Search({ query, onSetQuery }) {
   const inputEl = useRef(null);
 
-  //To contrast actual code vs this eventListener effect.
-  //This is the useKey code.
-  //   useEffect(
-  //     function () {
-  //       function callback(e) {
-  //         if (e.code.toLowerCase() === key.toLowerCase()) action();
-  //       }
-
-  //       document.addEventListener("keydown", callback);
-
-  //       return function () {
-  //         document.removeEventListener("keydown", callback);
-  //       };
-  //     },
-  //     [action, key]
-  //   );
-
-  // Lienzo effect dentro de useKey.
-  //
-  //     function () {
-  //       function callback(e) {
-  //         if (e.code.toLowerCase() === key.toLowerCase()) action();
-  //       }
-
-  //       document.addEventListener("keydown", callback);
-
-  //       return function () {
-  //         document.removeEventListener("keydown", callback);
-  //       };
-  //     },
-  //     [action, key]
-  //
-
-  //Effect in this component
-  //    function () {
-  //      function callback(e) {
-  //a       if (document.activeElement === inputEl.current) return;
-  //        if (e.code === "Enter") {
-  //a         inputEl.current.focus();
-  //          onSetQuery("");
-  //       }
-  //     }
-  //     document.addEventListener("keydown", callback);
-  //     return () => document.removeEventListener("keydown", callback);
-  //   },
-  //   [onSetQuery]
   useKey("Enter", function () {
     if (document.activeElement === inputEl.current) return;
     inputEl.current.focus();
     onSetQuery("");
   });
 
-  // useEffect(
-  //   //esta funcion se pasa como parametro
-  //   function () {
-  //     //pero esta ya esta dentro de useKey. Rescatemos algunas lineas.
-  //     function callback(e) {
-  //       //extraer esta linea tambien
-  //       if (document.activeElement === inputEl.current) return;
-
-  //       //la reivsion ya se hace dentro de useKey, pero el cuerpo no. Extraer las 2 lineas
-  //       if (e.code === "Enter") {
-  //         inputEl.current.focus();
-  //         onSetQuery("");
-  //       }
-  //     }
-
-  //     //la adhesion tambien
-  //     document.addEventListener("keydown", callback);
-  //     //el cleanup tambien. Ya no es necesario escribir esto
-  //     return () => document.removeEventListener("keydown", callback);
-  //   },
-  //   [onSetQuery]
-  // );
-
   return (
-    <input
-      className="search"
+    <StyledInput
       type="text"
       placeholder="Search movies..."
       value={query}
