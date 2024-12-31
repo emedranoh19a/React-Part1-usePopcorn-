@@ -59,9 +59,9 @@ WatchedMoviesList
 
 
 
-.list {
-  /* used watchedMovies List */
-  /* Used also in MovieList */
+/* .list {
+  /* used watchedMovies List 
+  /* Used also in MovieList 
   list-style: none;
   padding: 0.8rem 0;
   overflow: scroll;
@@ -113,7 +113,7 @@ WatchedMoviesList
   align-items: center;
   gap: 0.8rem;
 }
-
+ */
 
 
 /* ******* */
