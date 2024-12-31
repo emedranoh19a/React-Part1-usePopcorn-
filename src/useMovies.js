@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
 
 const API_Key = "68b66c15";
 
