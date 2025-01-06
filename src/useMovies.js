@@ -7,7 +7,7 @@ export function useMovies(query) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(""); //it is the error message
 
- const url =`http://www.omdbapi.com/?apikey=${API_Key}&s=${query}`
+ const url =`https://www.omdbapi.com/?apikey=${API_Key}&s=${query}`
 
   useEffect(
     function () {
